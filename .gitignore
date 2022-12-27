@@ -1,0 +1,14 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# misc
+_research
+.DS_Store
+*.pem
+/playwright-report/
+/playwright/.cache/
+
+# local env files
+.env
+.env.test
+.env.development.local
+.env.production.local
