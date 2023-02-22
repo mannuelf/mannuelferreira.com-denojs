@@ -1,21 +1,21 @@
-FROM denoland/deno:1.10.3
+FROM denoland/deno:1.30.3
 
 # The port that your application listens to.
-EXPOSE 1993
+EXPOSE 8000
 
 WORKDIR /app
 
-# Prefer not to run as root.
-USER deno
+USER root
 
 # Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
 # Ideally cache deps.ts will download and compile _all_ external files used in main.ts.
-COPY deps.ts .
-RUN deno cache deps.ts
+COPY import_map.json .
+RUN deno cache import_map.json
 
 # These steps will be re-run upon each file change in your working directory:
-ADD . .
+COPY . .
+
 # Compile the main app so that it doesn't need to be compiled each startup/entry.
 RUN deno cache main.ts
 
-CMD ["run", "--allow-net", "main.ts"]
+CMD ["deno", "run", "--allow-run", "--allow-read", "--allow-env", "--allow-net", "--import-map=import_map.json", "main.ts"]
